@@ -1,0 +1,22 @@
+{
+  "name": "workspace",
+  "version": "1.0.0",
+  "description": "Develope application that used blockchain.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mandon877/BlockChainApp.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mandon877/BlockChainApp/issues"
+  },
+  "homepage": "https://github.com/mandon877/BlockChainApp#readme",
+  "dependencies": {
+    "express": "^4.15.2"
+  }
+}
