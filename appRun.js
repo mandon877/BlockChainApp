@@ -21,6 +21,10 @@ app.get('/Simple', function(req, res){
       res.render('SimpleStorage'); 
 });
 
+app.get('/Car', function(req, res){
+      res.render('redirectCar');
+});
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.listen(process.env.PORT);
