@@ -47,8 +47,9 @@
     #newValue {width: 200px; margin-right:10px; text-align:right;}
   </style>
 </head>
-<body >
-<h1 style="height: 20px;">BlockChain.NoMarginTrading.App</h1>
+<!--<body ng-app ng-init="name = 'BlockChain App No Margin Trading'">-->
+<body ng-app="todo" ng-controller="TodoCtrl">
+<h1 style="height: 20px;">BlockChain.NoMarginTrading.App {{ name }}</h1>
 <div id="body-menu">
 <nav id="primary_nav_wrap">
 <ul>
@@ -106,7 +107,36 @@
 </nav>
 </div>
 <div id="body-content">
-<iframe src="https://www.w3schools.com/tags/att_iframe_src.asp" name="dd" scrolling="yes" style="display:block;border:none;overflow:hidden;height:100vh;width:100vw">www.w3schools.com</iframe>
+  <!--<h1>Todo</h1>-->
+  <!--{{ todo }}-->
+  <!--<h3>{{ todo.title }}</h3>-->
+  <!--<input type="text" ng-model="todo.title">-->
+  <!--<input type="checkbox" ng-model="todo.completed">-->
+  <!--<p>{{ todo.completed }}</p>-->
+  
+  <!--<date>{{ todo.createdAt }}</date>-->
+  <!--<input type="text" ng-model="todo.createdAt">-->
+  
+  <p> ------------------------------ </p>
+  <ul class="list-unstyled">
+       <li ng-repeat="todo in todos">
+          <div class="input-group">
+            <span class="input-group-addon">
+              <input type="checkbox" ng-model="todo.completed">
+            </span>
+            <input type="text" class="form-control" ng-model="todo.title">
+          </div><!-- /input-group -->
+          <date>{{ todo.createdAt }}</date>
+       </li>
+  </ul>
+    
+  <p> ------------------------------ </p>  
+  <div ng-repeat="todo in todos">
+      <input type="text" ng-model="todo.title">
+      <input type="checkbox" ng-model="todo.completed">
+      <date>{{ todo.createdAt }}</date>
+  </div>
+  
 </div>
 </body>
 </html>

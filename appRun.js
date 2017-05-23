@@ -25,6 +25,10 @@ app.get('/Car', function(req, res){
       res.render('redirectCar');
 });
 
+app.get('/Angular', function(req, res){
+      res.render('AngularJsTest');
+});
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.listen(process.env.PORT);
