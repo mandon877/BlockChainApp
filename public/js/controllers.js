@@ -1,5 +1,5 @@
 angular.module('todo').controller('TodoCtrl', ['$scope', function($scope) {
-     $scope.name = '   [정다정의 집]';
+     $scope.tempLogoString = 'BlockChain.NoMarginTrading.App [정다은의 집]';
     
     //  $scope.todo = {
     //   title: '요 가 수 련',

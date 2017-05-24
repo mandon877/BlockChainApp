@@ -7,7 +7,9 @@
   <meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
   <meta http-equiv="X-Frame-Options" content="deny" />
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.2.3/milligram.min.css"/>
+  <link rel="stylesheet" type="text/css" href="css/mainFrame.css"/>
   <link rel="stylesheet" type="text/css" href="css/navigation.css"/>
+  <link rel="stylesheet" type="text/css" href="css/style.css"/>
   <link data-require="bootstrap@3.3.6" data-semver="3.3.6" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
   <script data-require="bootstrap@3.3.6" data-semver="3.3.6" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
   <script data-require="angularjs@1.5.7" data-semver="1.5.7" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
@@ -15,43 +17,9 @@
   <script src="js/app.js"></script>
   <script src="js/directives.js"></script>
   <script src="js/controllers.js"></script>
-  <style>
-    /*body {margin-left:50px;}*/
-    body {
-          position:relative;
-          margin-left:0px;
-          margin-right:0px;
-          top:0px;
-    }
-    #body-menu {
-                position:relative;
-                top:5px;
-                left:0px;
-                z-index:9999;
-                width:100%;
-                height:32px;
-                border-style:solid;
-                border-width:0px;
-                background-color:#7fb8ff;
-    }
-    #body-content {
-                   position:relative;
-                   top:1px;
-                   left:0px;
-                   width:100%;
-                   height:100%;
-                   z-index:1;
-                   border-style:solid;
-                   border-width:0px;
-    }
-    #info-main {position:relative;top:20px;left:20px;z-index:2;}
-    #storedData {font-size:300%; margin-right:10px;}
-    #newValue {width: 200px; margin-right:10px; text-align:right;}
-  </style>
 </head>
-<!--<body ng-app ng-init="name = 'BlockChain App No Margin Trading'">-->
 <body ng-app="todo" ng-controller="TodoCtrl">
-<h1 style="height: 26px;">BlockChain.NoMarginTrading.App {{ name }}</h1>
+<h1 style="height: 25px;">{{ tempLogoString }}</h1>
 <todo-navigation></todo-navigation>
 <div id="body-content" class="container">
   <!--<h1>Todo List</h1>-->
