@@ -5,6 +5,12 @@
     }
   });
   
+  angular.module('todo').directive('todoNavigation', function() {
+    return {
+      templateUrl: 'tpl/todoNavigation.tpl.html'
+    }
+  });
+  
   angular.module('todo').directive('todoItem', function() {
     return {
       templateUrl: 'tpl/todoItem.tpl.html'
