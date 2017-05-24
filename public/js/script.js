@@ -28,6 +28,22 @@
         completed: true,
         createdAt: Date.now()
       }
-     ]
+     ];
+     
+     $scope.remove = function(todo) {
+        //alert("alert test");
+        
+        // find todo index in todos
+        var idx = $scope.todos.findIndex(function (item) {
+          return item.id == todo.id;
+        })
+        
+        // remove from todos
+        if(idx > -1) {
+          $scope.todos.splice(idx, 1);
+        }
+      
+     }
+     
   }]);
 })();
