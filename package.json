@@ -18,6 +18,7 @@
   "homepage": "https://github.com/mandon877/BlockChainApp#readme",
   "dependencies": {
     "express": "^4.15.2",
+    "serve-favicon": "^2.4.3",
     "socket.io": "^2.0.1"
   }
 }

@@ -22,7 +22,8 @@
 angular.module('todo').controller('TodoCtrl'
                                     //, ['$scope'
                                     , function($scope, todoStorage) {
-     $scope.tempLogoString = 'BlockChain.NoMarginTrading.App';
+     //$scope.tempLogoString = 'BlockChain.NoMarginTrading.App';
+     $scope.tempLogoString = 'Cryptown.eth';
     
     //  $scope.todo = {
     //   title: '요 가 수 련',
