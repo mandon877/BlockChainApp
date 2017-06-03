@@ -19,7 +19,7 @@
   <script src="js/services.js"></script>
 </head>
 <body ng-app="todo" ng-controller="TodoCtrl">
-<div id="top-block"><a href="login">로그인</a></div> 
+<div id="top-block"><a href="login">{{ LoginStatus }}</a></div> 
 <div id="logo-block">&nbsp;<img src="img/favicon.ico" height="20" width="20"/>&nbsp;{{ tempLogoString }}</div>
 <todo-navigation></todo-navigation>
 <div id="body-content">

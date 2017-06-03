@@ -4,6 +4,7 @@
   "description": "Develope application that used blockchain.",
   "main": "app.js",
   "scripts": {
+    "start": "nodemon main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -18,7 +19,11 @@
   "homepage": "https://github.com/mandon877/BlockChainApp#readme",
   "dependencies": {
     "express": "^4.15.2",
+    "express-session": "^1.15.3",
     "serve-favicon": "^2.4.3",
     "socket.io": "^2.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
   }
 }

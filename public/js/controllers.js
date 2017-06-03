@@ -22,33 +22,42 @@
 angular.module('todo').controller('TodoCtrl'
                                     //, ['$scope'
                                     , function($scope, todoStorage) {
+     
+    
+     
      //$scope.tempLogoString = 'BlockChain.NoMarginTrading.App';
      $scope.tempLogoString = 'Cryptown.eth';
+     
+     if (sessionStorage.length == '1')
+        $scope.LoginStatus = '로그인';
+     else
+        $scope.LoginStatus = '로그아웃';
+        
     
-    //  $scope.todo = {
-    //   title: '요 가 수 련',
-    //   completed: false,
-    //   createdAt: Date.now()
-    //  }
+     //  $scope.todo = {
+     //   title: '요 가 수 련',
+     //   completed: false,
+     //   createdAt: Date.now()
+     //  }
     
-    $scope.todos = todoStorage.get();
-    // $scope.todos = [
-    //   {
-    //     title: '요가 수련',
-    //     completed: false,
-    //     createdAt: Date.now()
-    //   },
-    //   {
-    //     title: '앵귤러 학습',
-    //     completed: false,
-    //     createdAt: Date.now()
-    //   },
-    //   {
-    //     title: '운동 하기',
-    //     completed: true,
-    //     createdAt: Date.now()
-    //   }
-    // ];
+     $scope.todos = todoStorage.get();
+     // $scope.todos = [
+     //   {
+     //     title: '요가 수련',
+     //     completed: false,
+     //     createdAt: Date.now()
+     //   },
+     //   {
+     //     title: '앵귤러 학습',
+     //     completed: false,
+     //     createdAt: Date.now()
+     //   },
+     //   {
+     //     title: '운동 하기',
+     //     completed: true,
+     //     createdAt: Date.now()
+     //   }
+     // ];
      
      $scope.remove = function(todo) {
         //alert("alert test");
@@ -86,6 +95,10 @@ angular.module('todo').controller('TodoCtrl'
      
      $scope.update = function () {
        todoStorage.update();
+     }
+     
+     $scope.login = function (loginInfo) {
+       todoStorage.login(loginInfo);
      }
 }
 //]
