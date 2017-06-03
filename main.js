@@ -16,7 +16,7 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'html');
 app.use(express.static(path.join(__dirname, 'public')));
 /////////////////////////////////////////////////////////////////////////////
-// login                                                                   //
+// login Start                                                             //
 /////////////////////////////////////////////////////////////////////////////
 app.use(session({
  secret: '@#@$MYSIGN#@$#$',
@@ -28,16 +28,8 @@ app.use(bodyParser.json());
 function simulatedDB() {
     const data = {
       User: [
-        {
-          id: 0,
-          username: 'mandon877@gmail.com',
-          password: '1234567891'
-        },
-        {
-          id: 1,
-          username: 'mandon877@hotmail.com',
-          password: '1234567891'
-        }
+        { id: 0,  username: 'mandon877@gmail.com',   password: '1234567891' },
+        { id: 1,  username: 'mandon877@hotmail.com', password: '1234567891' }
       ]
     };
     this.User = {
@@ -46,10 +38,12 @@ function simulatedDB() {
       login: (username, password) => {
           return Promise.resolve()
           .then(() => {
-            console.log(username + ' : ' + password);
+            console.log("  2. username / passowrd : " + username + ' / ' + password);
             if (!username || !password) throw new Error("Invalid Parameters")
             const user = this.User.findByUsername(username);
             if (!user || user.password !== password) throw new Error("Invalid Credentials");
+            console.log("  3. return user : " + user);
+            console.log("     return [user.id] .username / .password : [" + user.id + "] " + user.username + " / " + user.password );
             return user;
           });
       }
@@ -59,10 +53,32 @@ function simulatedDB() {
 var Models = new simulatedDB();
 
 app.use((req, _, next) => {
+  console.log("A. ===================================>  const user : " 
+              + req.session + " , "
+              + req.session.user ); //+ " , " 
+             // + req.session.user.username + "  ");
   const user = req.session && req.session.user && req.session.user.username || 'Unauthenticated';
-  console.log(req.method, req.path, "<",user,">") ;
+  console.log("  0. " + req.method, req.path, "<",user,">") ;
   next();
 });
+
+app.post('/login', function(req, res, next) {
+    const body = req.body;
+    console.log('  1. Login request received:', body);
+    return Models.User
+      .login(req.body.username, req.body.password)
+      .then(user => {
+        req.session.user = user;
+        console.log("  4. Logged in as: ", user.username);
+        console.log("     req.session.user: ", req.session.user);
+        res.redirect('/')
+        //return res.send({ok:'ok'})
+      })
+      .catch(err => {
+          console.log(err);
+          res.status(400).send(err);
+      });
+})
 
 // app.get('/login/:loggedIn', function(req, res){
 //     loggedIn = req.params.loggedIn;
@@ -72,6 +88,7 @@ app.use((req, _, next) => {
 
 app.get('/logout', function(req, res){
     var sess = req.session;
+    console.log("100. sess.username : " + sess.username);
     if(sess.username){
         req.session.destroy(function(err){
             if(err){
@@ -86,41 +103,21 @@ app.get('/logout', function(req, res){
 });
 
 ///////////////////////////////////////////////////////////////////////////////
+// login End                                                                 //
+///////////////////////////////////////////////////////////////////////////////
 
 app.get('/', function(req, res){
-    console.log(req.session.username);
-    if (req.session.username){
-        console.log(req.session.username);
-        
+    console.log(">> Home(/) req.session.user : " + req.session.user);
+
+    if (req.session.user)
         res.render('home'); 
-        
-    }
     else
-    {
-        console.log('1.login');
         res.render('login'); 
-    }
 });
 
 app.get('/login', function(req, res){
     res.render('login'); 
 });
-
-app.post('/login', function(req, res) {
-    const body = req.body;
-    console.log('Login request received:', body);
-    return Models.User
-      .login(req.body.username, req.body.password)
-      .then(user => {
-        req.session.user = user;
-        console.log("Logged in as:", user.username);
-        return res.send({ok:'ok'})
-      })
-      .catch(err => {
-          console.log(err);
-          res.status(400).send(err);
-      });
-})
 
 app.get('/Simple', function(req, res){
     // if (loggedIn)
