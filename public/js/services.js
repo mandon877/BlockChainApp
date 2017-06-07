@@ -94,6 +94,7 @@ angular.module('todo').factory('todoStorage', function ($http, $window, $rootSco
        //console.log('here')
        return fetch('/login', {
            method: 'POST',
+           credentials: 'include',
            headers: {
              "content-type": "application/json"
            },
