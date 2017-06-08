@@ -7,43 +7,41 @@ var io   = require('socket.io'),
     bodyParser = require('body-parser');
     
 var app = express();
-//var server = http.createServer(app);
-//var socket = io.listen(server);
+var server = http.createServer(app);
+var socket = io.listen(server);
 var session = require('express-session');
 
-/*
 var redis = require("redis");
 var redisStore = require('connect-redis')(session);
 var client = redis.createClient();
-*/
 
 app.engine('.html', require('ejs').__express);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'html');
 app.use(express.static(path.join(__dirname, 'public')));
 
-//app.engine('html', require('ejs').renderFile);
+app.engine('html', require('ejs').renderFile);
 /////////////////////////////////////////////////////////////////////////////
 // login Start                                                             //
 /////////////////////////////////////////////////////////////////////////////
 app.use(session({
- secret: 'aasdfsadf',
- resave: true,
- saveUninitialized: true,
- cookie: {
-     maxAge: 24 * 60 * 60 * 1000,
-     secure: true
- }
-//  secret: '@#@$MYSIGN#@$#$',
-//  store: new redisStore({
-//                       //host: 'localhost', 
-//                       host: process.env.IP,
-//                       port: 6379, 
-//                       client: client, 
-//                       ttl : 2606
-//             }),
+//  secret: 'aasdfsadf',
+//  resave: true,
 //  saveUninitialized: true,
-//  resave: false,
+//  cookie: {
+//      maxAge: 24 * 60 * 60 * 1000,
+//      secure: true
+//  }
+ secret: '@#@$MYSIGN#@$#$',
+ store: new redisStore({
+                      //host: 'localhost', 
+                      host: process.env.IP,
+                      port: 6379, 
+                      client: client, 
+                      ttl : 2606
+            }),
+ saveUninitialized: true,
+ resave: false
 //  cookie: { secure: true}
     // secret: 'secret',
     // saveUninitialized: false,
@@ -67,14 +65,12 @@ function simulatedDB() {
       login: (username, password) => {
           return Promise.resolve()
           .then(() => {
-            //console.log("  2. username / passowrd : " + username + ' / ' + password);
+            console.log("  2. username / passowrd : " + username + ' / ' + password);
             if (!username || !password) throw new Error("Invalid Parameters")
             const user = this.User.findByUsername(username);
             if (!user || user.password !== password) throw new Error("Invalid Credentials");
-            /*
             console.log("  3. return user : " + user);
             console.log("     return [user.id] .username / .password : [" + user.id + "] " + user.username + " / " + user.password );
-            */
             return user;
           });
       }
@@ -84,12 +80,6 @@ function simulatedDB() {
 var Models = new simulatedDB();
 
 app.use((req, _, next) => {
-    /*
-  console.log("A. ===================================>  const user : " 
-              + req.session + " , "
-              + req.session.user ); //+ " , " 
-             // + req.session.user.username + "  ");
-             */
   console.log(JSON.stringify(req.session, null, 2))
   const user = req.session && req.session.user && req.session.user.username || 'Unauthenticated';
   console.log("  0. " + req.method, req.path, "<",user,">") ;
@@ -121,34 +111,34 @@ app.post('/login', function(req, res, next) {
 // });
 
 
-// app.get('/logout', function(req, res){
-//     var sess = req.session;
-//     console.log("100. sess.username : " + sess.username);
-//     if(sess.username){
-//         req.session.destroy(function(err){
-//             if(err){
-//                 console.log(err);
-//             }else{
-//                 res.redirect('/login');
-//             }
-//         })
-//     }else{
-//         res.redirect('/login');
-//     }
-// });
+app.get('/logout', function(req, res){
+    var sess = req.session;
+    console.log("100. sess.username : " + sess.username);
+    if(sess.username){
+        req.session.destroy(function(err){
+            if(err){
+                console.log(err);
+            }else{
+                res.redirect('/login');
+            }
+        })
+    }else{
+        res.redirect('/login');
+    }
+});
 
 ///////////////////////////////////////////////////////////////////////////////
 // login End                                                                 //
 ///////////////////////////////////////////////////////////////////////////////
 
 app.get('/', function(req, res){
-    // console.log(">> Home(/) req.session.user : " + req.session.user);
+    //console.log(">> Home(/) req.session.user : " + req.session.user);
 
-    if (req.session.user)
-        res.render('home'); 
-    else
-        res.render('login'); 
-    //res.render('home'); 
+    // if (req.session.user)
+    //     res.render('home'); 
+    // else
+    //     res.render('login'); 
+    res.render('home'); 
 });
 
 app.get('/login', function(req, res){
