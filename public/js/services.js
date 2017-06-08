@@ -6,8 +6,8 @@ angular.module('todo').factory('todoStorage', function ($http, $window, $rootSco
   var TODO_DATA = 'TODO_DATA';
   var tempUser = '';
   var tempPw = '';
+  var tempRes = '';
   
-
   var storage = {
      todos: [],
      //  todos : [
@@ -27,17 +27,6 @@ angular.module('todo').factory('todoStorage', function ($http, $window, $rootSco
      //     createdAt: Date.now()
      //   }
      //  ],
-    
-     userprofiles: [
-       {
-         userId: 'mandon877@gmail.com',
-         password: '1234567891'
-       },
-       {
-         userId: 'mandon877@hotmail.com',
-         password: '1234567891'
-       }
-     ],
     
      _saveToLocalStorage: function (data) {
        localStorage.setItem(TODO_DATA, JSON.stringify(data))
@@ -93,38 +82,40 @@ angular.module('todo').factory('todoStorage', function ($http, $window, $rootSco
      login: function (loginInfo) {
        //console.log('here')
        return fetch('/login', {
-           method: 'POST',
-           credentials: 'include',
-           headers: {
-             "content-type": "application/json"
-           },
-           body: JSON.stringify(loginInfo)
+                              method: 'POST',
+                              credentials: 'include',
+                              headers: { "content-type": "application/json"},
+                              body: JSON.stringify(loginInfo)
        })
-       .then(res => res.json())
-       .then(json => console.log(json))
+       //.then(res => res.json())
+       //.then(json => console.log(json))
+       .then(res => {
+                     if(res.ok) 
+                         $window.location.href = '/home';
+       })
        .catch(err => {
            throw new Error('Error login:', err)
         });
+       
        // find user information
        //   var user_idx = storage.userprofiles.findIndex(function (user_info) {
        //       return user_info.userId == loginInfo.userId && user_info.password == loginInfo.password
        //   })
 
        // 권한 부여
-    //   if(user_idx > -1) {
-    //         //alert("#111");
-    //         $window.sessionStorage["loginInfo"] = JSON.stringify(loginInfo);
+       // if(user_idx > -1) {
+             //alert("#111");
+             //$window.sessionStorage["loginInfo"] = JSON.stringify(loginInfo);
             
-    //         //tempUser = JSON.parse(sessionStorage.loginInfo);
-    //         //  $rootScope.userId = tempUser.userId;
-    //         //  $rootScope.password = tempUser.password;
-    //         //$window.location.href = '/login/' + tempUser.userId + '/' + tempUser.password + ''; 
+             //tempUser = JSON.parse(sessionStorage.loginInfo);
+             //  $rootScope.userId = tempUser.userId;
+             //  $rootScope.password = tempUser.password;
+             //$window.location.href = '/login/' + tempUser.userId + '/' + tempUser.password + ''; 
             
-    //         $rootScope.loggedIn = true;
-    //         $window.location.href = '/login/' + $rootScope.loggedIn; 
-    //   }
+             //$rootScope.loggedIn = true;
+             //$window.location.href = '/login/' + $rootScope.loggedIn; 
+        //  }
      }
-     
   }
 
   return storage;

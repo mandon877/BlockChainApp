@@ -28,10 +28,11 @@ angular.module('todo').controller('TodoCtrl'
      //$scope.tempLogoString = 'BlockChain.NoMarginTrading.App';
      $scope.tempLogoString = 'Cryptown.eth';
      
-     if (sessionStorage.length == '1')
-        $scope.LoginStatus = '로그인';
-     else
-        $scope.LoginStatus = '로그아웃';
+    //  if (sessionStorage.length == '1')
+    //     $scope.LoginStatus = '로그인';
+    //  else
+    //     $scope.LoginStatus = '로그아웃';
+    $scope.LoginStatus = '로그아웃';
         
     
      //  $scope.todo = {

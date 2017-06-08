@@ -67,10 +67,7 @@ app.post('/login', function(req, res, next) {
       .then(user => {
         req.session.key=user.username;
         console.log("Logged in as username : ", req.session.key);
-        //console.log(JSON.stringify(req, null, 2))
-        //return res.send({ok:'ok'})
-        //res.end('done')
-        res.redirect('/');
+        return res.send({ok:'ok'})
       })
       .catch(err => {
           console.log(err);
@@ -86,17 +83,24 @@ app.get('/logout', function(req, res){
             res.redirect('/login');
     });
 });
-
 ///////////////////////////////////////////////////////////////////////////////
 // login End                                                                 //
 ///////////////////////////////////////////////////////////////////////////////
 app.get('/login', function(req, res){
-    res.render('login'); 
+    if (req.session.key)
+       res.render('home'); 
+    else
+       res.render('login'); 
 });
 
 app.get('/', function(req, res){
-    console.log(">> Home(/) req.session.key : " + req.session.key);
+    if (req.session.key)
+        res.render('home'); 
+    else
+       res.render('login'); 
+});
 
+app.get('/home', function(req, res){
     if (req.session.key)
         res.render('home');
     else 
