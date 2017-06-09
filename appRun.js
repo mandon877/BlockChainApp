@@ -9,10 +9,87 @@ var app = express();
 var server = http.createServer(app);
 var socket = io.listen(server);
 var session = require('express-session');
+var mysql = require('mysql');
 app.engine('.html', require('ejs').__express);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'html');
 app.use(express.static(path.join(__dirname, 'public')));
+
+/////////////////////////////////////////////////////////////////////////////
+// START DB Connection                                                     //
+/////////////////////////////////////////////////////////////////////////////
+// mysql-ctl cli
+// use protoss;
+// show tables;
+// SELECT * FROM USERPROFILE;
+///////////////////////////////////////////////////////////////////////////////
+// var mysql = require("mysql");
+// var connection = mysql.createConnection({
+//     host : "localhost",
+//     port : 3306,
+//     user : "root",
+//     password : "apmsetup",
+//     database : "nodejs"
+// });
+// var sqlQuery = "INSERT INTO member SET ?";
+// var post = {id : "kim3", pw : "1333", name : "noname"};
+// 
+// function callback(err,result){
+//     if(err){
+//         throw err
+//     }
+//     console.log("Insert Complete!");
+//     console.log(query.sql);
+// }
+// 
+// connection.connect();
+// var query = connection.query(sqlQuery, post, callback);
+// connection.end();
+//
+// var mysql = require("mysql");
+// var connection = mysql.createConnection({
+//     host : "localhost",
+//     port : 3306,
+//     user : "root",
+//     password : "apmsetup",
+//     database : "nodejs"
+// });
+// var sqlQuery = "SELECT * FROM member";
+// 
+// function callback(err,rows, fields){
+//     if(err){
+//         throw err
+//     }    
+//     for(var i=0; i<rows.length;i++){
+//         console.log(rows[i].id+" | "+rows[i].pw+" | "+rows[i].name);
+//     }
+// }
+// 
+// connection.connect();
+// connection.query(sqlQuery, callback);
+// connection.end();
+//////////////////////////////////////////////////////////////////////////////////////
+var connection = mysql.createConnection({
+    host     :  process.env.IP,
+    user     : 'mandon877',
+    password : '1', 
+    port     : 3306,
+    database : 'protoss'
+});
+
+// connection.connect();
+// connection.query('SELECT USERID, USERNAME, USERGROUPID, PASSWORD FROM USERPROFILE', function(err, rows, fields) {
+//     if(!err)
+//         console.log('The solution is : ', rows);
+//     else
+//         console.log('Error while performing Query.', err);
+// });
+    
+// connection.end();
+/////////////////////////////////////////////////////////////////////////////
+// END DB Connection                                                       //
+/////////////////////////////////////////////////////////////////////////////
+
 
 /////////////////////////////////////////////////////////////////////////////
 // login Start                                                             //
@@ -27,11 +104,41 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 function simulatedDB() {
     const data = {
-      User: [
-        { id: 0,  username: 'mandon877@gmail.com',   password: '1234567891' },
-        { id: 1,  username: 'mandon877@hotmail.com', password: '1234567891' }
-      ]
+       User: [
+         //   { id: 0,  username: 'mandon877@gmail.com',   password: '1234567891' },
+         //   { id: 1,  username: 'mandon877@hotmail.com', password: '1234567891' },
+       ]
     };
+    
+    var sqlQuery = "SELECT USERID, PASSWORD FROM USERPROFILE";
+    
+    function callback(err,rows,fields) {
+         if(err) {
+             throw err
+         }
+
+         for(var i=0; i<rows.length; i++) {
+             var newUser = {
+                id: i,
+                username: rows[i].USERID,
+                password: rows[i].PASSWORD
+             };
+             data.User.push(newUser);
+
+             //  data.User[i].id = i;
+             //  data.User[i].username = rows[i].USERID;
+             //  data.User[i].password = rows[i].PASSWORD;
+             //  console.log('The solution is : ', rows);
+             //  console.log('data.User[' + i + '].id : ' +  data.User[i].id);
+             //  console.log('data.User[' + i + '].username : ' +  data.User[i].username);
+             //  console.log('data.User[' + i + '].password : ' +  data.User[i].password);
+     }
+    }
+    
+    connection.connect();
+    connection.query(sqlQuery,callback);
+    connection.end();
+    
     this.User = {
       find: id => data.User[id],
       findByUsername: username => data.User.find(o => o.username === username),
@@ -87,11 +194,17 @@ app.get('/logout', function(req, res){
 // login End                                                                 //
 ///////////////////////////////////////////////////////////////////////////////
 app.get('/login', function(req, res){
-    res.render('login'); 
+    if (req.session.key)
+       res.render('home'); 
+    else
+       res.render('login'); 
 });
 
 app.get('/', function(req, res){
-    res.render('login'); 
+    if (req.session.key)
+        res.render('home'); 
+    else
+       res.render('login'); 
 });
 
 app.get('/home', function(req, res){
