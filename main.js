@@ -1,3 +1,6 @@
+//////////////////////////////////////////////////////////////////
+//  https://blockchainapp-mandon877.c9users.io/
+//////////////////////////////////////////////////////////////////
 var io   = require('socket.io'),
     url  = require('url'),
     sys  = require('sys'),
@@ -149,8 +152,8 @@ function simulatedDB() {
             if (!username || !password) throw new Error("Invalid Parameters")
             const user = this.User.findByUsername(username);
             if (!user || user.password !== password) throw new Error("Invalid Credentials");
-            console.log("  3. return user : " + user);
-            console.log("     return [user.id] .username / .password : [" + user.id + "] " + user.username + " / " + user.password );
+            //console.log("  3. return user : " + user);
+            //console.log("     return [user.id] .username / .password : [" + user.id + "] " + user.username + " / " + user.password );
             return user;
           });
       }
@@ -168,12 +171,12 @@ var Models = new simulatedDB();
 
 app.post('/login', function(req, res, next) {
     const body = req.body;
-    console.log('Login request received:', body);
+    //console.log('Login request received:', body);
     return Models.User
       .login(req.body.username, req.body.password)
       .then(user => {
         req.session.key=user.username;
-        console.log("Logged in as username : ", req.session.key);
+        //console.log("Logged in as username : ", req.session.key);
         return res.send({ok:'ok'})
       })
       .catch(err => {

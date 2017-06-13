@@ -32,7 +32,9 @@ angular.module('todo').controller('TodoCtrl'
     //     $scope.LoginStatus = '로그인';
     //  else
     //     $scope.LoginStatus = '로그아웃';
+    $scope.LoginInStatus = '로그인';
     $scope.LoginStatus = '로그아웃';
+    
         
     
      //  $scope.todo = {
