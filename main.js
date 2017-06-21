@@ -1,6 +1,60 @@
 //////////////////////////////////////////////////////////////////
 //  https://blockchainapp-mandon877.c9users.io/
 //////////////////////////////////////////////////////////////////
+// sudo su < root
+//////////////////////////////////////////////////////////////////
+// Java 설치
+//////////////////////////////////////////////////////////////////
+// sudo apt-add-repository ppa:webupd8team/java
+// sudo apt-get update
+// $ sudo apt-get install oracle-java7-installer
+// $ java -version
+//////////////////////////////////////////////////////////////////
+// scala 설치
+//////////////////////////////////////////////////////////////////
+// cd /usr/local/src/
+// sudo wget http://www.scala-lang.org/files/archive/scala-2.11.8.tgz
+// sudo mkdir /usr/local/src/scala
+// sudo tar xvf scala-2.11.8.tgz -C /usr/local/src/scala/
+// #자신의 사용하는 shell의 설정 파일을 수정할 것. (ex. zsh : zshrc)
+// vim ~/.bashrc
+// #맨 밑에 추가
+//---------------------------------------------------------
+// export SCALA_HOME=/usr/local/src/scala/scala-2.11.8
+// export PATH=$SCALA_HOME/bin:$PATH
+// source ~/.bashrc
+// scala -version
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+// Git 설치
+/////////////////////////////////////////////////////////////////////
+// sudo apt-get install -y git
+//////////////////////////////////////////////////////////////////
+// Spark 설치
+//////////////////////////////////////////////////////////////////
+// cd /usr/local/src/
+// sudo wget http://d3kbcqa49mib13.cloudfront.net/spark-1.6.1.tgz
+// sudo tar xvf spark-1.6.1.tgz
+// cd spark-1.6.1/
+// # 자신의 사용하는 shell의 설정 파일을 수정할 것. (ex. zsh : zshrc)
+// vim ~/.bashrc
+// # 맨 아래에 추가한다.
+// export SPARK_HOME=/usr/local/src/spark-1.6.1
+// export PATH=$SPARK_HOME/bin:$PATH
+// source ~/.bashrc
+// #It takes a long time!
+// sudo sbt/sbt assembly 
+// run-example SparkPi 10
+// spark-shell
+//////////////////////////////////////////////////////////////////
+// DISK 관리
+//////////////////////////////////////////////////////////////////
+// $ du -m -d 1 -a | sort -n
+// $ du -hx / -t 50000000
+// $ sudo rm -rf /tmp/*​
+// $ sudo apt-get install ncdu
+// $ ncdu
+//////////////////////////////////////////////////////////////////
 var io   = require('socket.io'),
     url  = require('url'),
     sys  = require('sys'),
@@ -148,7 +202,7 @@ function simulatedDB() {
       login: (username, password) => {
           return Promise.resolve()
           .then(() => {
-            console.log("  2. username / passowrd : " + username + ' / ' + password);
+            //console.log("  2. username / passowrd : " + username + ' / ' + password);
             if (!username || !password) throw new Error("Invalid Parameters")
             const user = this.User.findByUsername(username);
             if (!user || user.password !== password) throw new Error("Invalid Credentials");
