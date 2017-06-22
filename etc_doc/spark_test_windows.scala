@@ -75,7 +75,7 @@ hadoop fs -cat /user/spark/item.txt
 val books = sc.?("/user/spark/books.xml")
 val books = sc.wholeTextFiles("/user/spark/books.xml")
 
-val catalog = scals.xml.XML.loadString(books.first_2)
+val catalog = scala.xml.XML.loadString(books.first_2)
 val catalog = scala.xml.XML.loadString(books.first)
 
 val title = (catalog \\ "book" \\ ?.map(_.text)
@@ -249,14 +249,14 @@ Password : raj_ops
 
 /user/spark에 빌드한 JAR파일 업로드
 
-HDFS에서 jar 파일 확인 확인
+//HDFS에서 jar 파일 확인 확인
 hadoop fs -ls /user/spark/lecture05-1.0-jar-with-dependencies.jar
 
-리눅스 로컬로 다운로드
+//리눅스 로컬로 다운로드
 hadoop fs -get /user/spark/lecture05-1.0-jar-with-dependencies.jar
 
 
-예제 실행
+//예제 실행
 spark-submit --master yarn-client --class lecture.sk.com.WeblogCounter lecture05-1.0-jar-with-dependencies.jar
 ==> 확인 에러남
 
@@ -284,15 +284,18 @@ filtered.toDebugString
 
 filtered.collect
 
+result.unpersist()
+
 filtered.toDebugString
 
 filtered.collect
 
-result.unpersist()
+
 -------------------------------------------------------------------------------------------------------
 // Spark 스트리밍 처리(5초단위로 끈어서 RDD에 저장한다.)
 tcp 서버 구동(리눅스 창 하나 더 띄운다)
-nc -lk 8282
+#nc -lk 8282
+nc -lp 8282
 ==> 기다리고 있다.
 scala> import org.apache.spark.streaming.StreamingContext
 scala> import org.apache.spark.streaming.Seconds
@@ -306,6 +309,13 @@ scala> ssc.stop()
 
 ------------------------------------------------------------------------------------------------------------------
 //단어 누적 개수 구하기(질문 에러)
+tcp 서버 구동(리눅스 창 하나 더 띄운다)
+#nc -lk 8282
+nc -lp 8282
+==> 기다리고 있다.
+import org.apache.spark.streaming.StreamingContext
+import org.apache.spark.streaming.Seconds
+val ssc = new StreamingContext(sc,Seconds(5))
 var mystream = ssc.socketTextStream("localhost", 8282)
 var words = mystream.map(line => (line, 1)).reduceByKey((v1, v2) => (v1 + v2))
 def updateCount = (newCounts:Seq[Int], state:Option[Int]) => {
@@ -314,9 +324,10 @@ def updateCount = (newCounts:Seq[Int], state:Option[Int]) => {
   Some(newCount + previousCount)
 }
 val totalWords = words.updateStateByKey(updateCount)
-val totalWords.print()
+totalWords.print()
 ssc.checkpoint("checkpoint")
 ssc.start()
+ssc.stop()
 ------------------------------------------------------------------------------------------------------------------
 /////////////////////////////////////////////////////////
 // 다운로드
@@ -445,7 +456,7 @@ object WeblogStreamCounterUpdate {
     val weblog = stream.map(record => record.value)
 
     ////////////////////////////////////////////////
-    val itemName = sc.textFile("item.txt")
+    val itemName = sc.textFile("/user/spark/item.txt")
       .map(line => line.split(','))
       .map(fields => (fields(0), fields(1)))
 
@@ -478,6 +489,16 @@ object WeblogStreamCounterUpdate {
   }
 }
 
+// HDFS에 넣는다.
+hadoop fs -put lecture09-1.0-jar-with-dependencies.jar /user/spark
+
+// 현폴더 C:\spark\bin로 가져온다.
+hadoop fs -get /user/spark/lecture09-1.0-jar-with-dependencies.jar
+
+
+//예제 실행(? 교재 참조)
+spark-submit --master yarn-client --class lecture.sk.com.WeblogCounter lecture09-1.0-jar-with-dependencies.jar
+==> 확인 에러남
 -----------------------------------------------------------------------------------------------------------------
 
 //////////////////////////////////
@@ -503,14 +524,10 @@ hadoop fs -put /usr/hdp/2.6.0.3-8/spark2/README.md
 // 2. pws를 참조하여 key에 해당하는 값을 참조, map partition RDD 생성
 // 3. collect로 array[String] 생성
 --------------------
-val pws = Map("Apache Spark" -> "http://spark.apache.org/", "Scala" -> 
-
-"http://www.scala-lang.org/")
+val pws = Map("Apache Spark" -> "http://spark.apache.org/", "Scala" -> "http://www.scala-lang.org/")
 val websites = sc.parallelize(Seq("Apache Spark", "Scala")).map(pws).collect
 ----------------------------
-val pws = Map("Apache Spark" -> "http://spark.apache.org/", "Scala" -> 
-
-"http://www.scala-lang.org/")
+val pws = Map("Apache Spark" -> "http://spark.apache.org/", "Scala" -> "http://www.scala-lang.org/")
 val pwsB = sc.broadcast(pws)
 val websites = sc.parallelize(Seq("Apache Spark", "Scala")).map(pwsB.value).collect
 ==> woker node 단위로 보내서 속도 향상
@@ -519,11 +536,11 @@ val websites = sc.parallelize(Seq("Apache Spark", "Scala")).map(pwsB.value).coll
 크전송 유발
 --------------------------
 //모든 단어의 평균 길이 구하기
-val words = sc.textFile("/Users/Sagara/spark/README.md").flatMap(line => line.split(' '))
+#val words = sc.textFile("/Users/Sagara/spark/README.md").flatMap(line => line.split(' '))
+val words = sc.textFile("/user/spark/README.md").flatMap(line => line.split(' '))
 //Double = 5.73015873015873
 
-//words.map(word => (word, word.length)).reduceByKey((key,value) => key + value).map(x 
-=> x._2).reduce((x,y)=>x+y).toDouble / words.count
+//words.map(word => (word, word.length)).reduceByKey((key,value) => key + value).map(x => x._2).reduce((x,y)=>x+y).toDouble / words.count
 words.map(word => word.length).reduce((x,y)=>x+y).toDouble / words.count
 //words.map(word => (word, word.length)).reduceByKey((key,value) => key + value).collect
 
@@ -546,7 +563,7 @@ def addTotals (word:String, words:Accumulator[Int], letters:Accumulator[Double])
 var totalWords = sc.accumulator(0)
 var totalLetters = sc.accumulator(0.0)
 
-var words = sc.textFile("README.md").flatMap(line => line.split(' '))
+var words = sc.textFile("/user/spark/README.md").flatMap(line => line.split(' '))
 words.foreach(word => addTotals(word, totalWords, totalLetters))
 print ("Average word length: ", totalLetters.value/totalWords.value)
 ---------------------------------------------------------------------------------------------------------------------
@@ -566,7 +583,7 @@ val sqlContext = new org.apache.spark.sql.SQLContext(sc)
 // Input file loading..
 val df = sqlContext.read.format("com.databricks.spark.csv").option("header", "true").option
 
-("inferSchema", "true").load("iris.txt")
+("inferSchema", "true").load("/user/spark/iris.txt")
 
 // df. 탭
 df.
@@ -653,7 +670,7 @@ val df2 = spark.createDataFrame(rdd, schema)
 //12장 자주 사용되는 Spark 데이터처리 패턴
 //1. 반복알고리즘 실습
 val iters = 10
-val lines = spark.read.textFile("pages.txt").rdd
+val lines = spark.read.textFile("/user/spark/pages.txt").rdd
 
 val links = lines.map{ s => 
      val parts = s.split("\\s+") 
@@ -737,19 +754,13 @@ val Array(trainingData, testData) = df.randomSplit(Array(0.7, 0.3))
 
 
 // input columns로 feature 생성
-val assembler = new VectorAssembler().setInputCols(Array("sepal_length", 
-
-"sepal_width", "petal_length", "petal_width")).setOutputCol("features")
+val assembler = new VectorAssembler().setInputCols(Array("sepal_length", "sepal_width", "petal_length", "petal_width")).setOutputCol("features")
 
 // LabelIndexer로 Label컬럼을 LabelIndex로 변경
-val labelIndexer = new StringIndexer().setInputCol("species").setOutputCol
-
-("indexedLabel")
+val labelIndexer = new StringIndexer().setInputCol("species").setOutputCol("indexedLabel")
 
 // FeatureIndexer
-val featureIndexer = new VectorIndexer().setInputCol("features").setOutputCol
-
-("indexedFeatures").setMaxCategories(4)
+val featureIndexer = new VectorIndexer().setInputCol("features").setOutputCol("indexedFeatures").setMaxCategories(4)
 
 // param descriptions
 //     maxCategory : Threshold for the number of values a categorical feature can take. 
