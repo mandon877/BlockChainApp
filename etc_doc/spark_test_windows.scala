@@ -60,7 +60,8 @@ tar xvf sample_data.tar.gz
 hadoop fs -put lecture/data/* /user/spark
 
 //spark 시작 명령어//
-./start.sh
+#./start.sh
+spark-shell --conf spark.sql.warehouse.dir=file:///c:/tmp/spark-warehouse
 sc.appName
 val logfile = "/user/spark/web.log"
 val logs = sc.textFile(logfile)
@@ -77,6 +78,7 @@ val books = sc.wholeTextFiles("/user/spark/books.xml")
 
 val catalog = scala.xml.XML.loadString(books.first_2)
 val catalog = scala.xml.XML.loadString(books.first)
+val catalog = scala.xml.XML.loadString(books)
 
 val title = (catalog \\ "book" \\ ?.map(_.text)
 val title = (catalog \\ "book" \\ "title".map(_.text)
@@ -567,23 +569,24 @@ var words = sc.textFile("/user/spark/README.md").flatMap(line => line.split(' ')
 words.foreach(word => addTotals(word, totalWords, totalLetters))
 print ("Average word length: ", totalLetters.value/totalWords.value)
 ---------------------------------------------------------------------------------------------------------------------
-//11장 실습
+////////////////////////////////////////////////////////////////////////////////
+//11장 실습                                                                   //
+////////////////////////////////////////////////////////////////////////////////
+// # spark-shell 시작 명령어 ///////////////////////////////////////////////////
+// spark-shell --conf spark.sql.warehouse.dir=file:///c:/tmp/spark-warehouse  //
+////////////////////////////////////////////////////////////////////////////////
 import org.apache.spark.sql.SQLContext
 import scala.collection.mutable.ArrayBuffer
 import org.apache.spark.sql.SparkSession
 
-//val spark = SparkSession.builder().appName("Spark ML example").config
-
-("spark.some.config.option", "some-value").getOrCreate()
+//val spark = SparkSession.builder().appName("Spark ML example").config("spark.some.config.option", "some-value").getOrCreate()
 //val sc = spark.sparkContext
 
 val sqlContext = new org.apache.spark.sql.SQLContext(sc)
 
 // csv파일에 header유무 확인, delimiter 확인
 // Input file loading..
-val df = sqlContext.read.format("com.databricks.spark.csv").option("header", "true").option
-
-("inferSchema", "true").load("/user/spark/iris.txt")
+val df = sqlContext.read.format("com.databricks.spark.csv").option("header", "true").option("inferSchema", "true").load("/user/spark/iris.txt")
 
 // df. 탭
 df.
@@ -659,9 +662,7 @@ df.groupBy("species").count.sort(desc("count")).collect().mkString(",")
 //sql문 작성
 // setosa종의 sepal 길이, petal 길이 출력
 df.registerTempTable("iris") //테이블 생성
-spark.sql("""select sepal_length, petal_length, species from iris where species = "setosa" 
-
-""").show
+spark.sql("""select sepal_length, petal_length, species from iris where species = "setosa"""").show
 
 //rdd에서 df 생성 스키마+rdd = dataframe
 val schema = df.schema
@@ -701,43 +702,42 @@ for (i <- 1 to iters) {
   println("\n")
 }
 
+for (i <- 1 to iters) {
+  val contribs = links.join(ranks).values.flatMap{ case (urls, rank) =>
+                  val size = urls.size
+                  urls.map(url, rank /size)
+  }
+  ranks = contribs.reduceByKey(_ + _).mapValues(0.15 + 0.85 * _)
+  println("iters:"+i)
+  ranks.collect().foreach(tup => println(tup._1 + " has rank: " + tup._2 + "."))
+  println("\n")
+}
+
 
 ------------------------------------------------------------------------------------------------------------------
 //2. classification 실습
 import org.apache.spark.sql.SQLContext
 import org.apache.spark.ml.feature.Normalizer
 import scala.collection.mutable.ArrayBuffer
-import org.apache.spark.ml.classification.{RandomForestClassificationModel, 
-
-RandomForestClassifier, DecisionTreeClassifier}
+import org.apache.spark.ml.classification.{RandomForestClassificationModel, RandomForestClassifier, DecisionTreeClassifier}
 import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator
-import org.apache.spark.ml.feature.{IndexToString, StringIndexer, VectorIndexer, 
-
-VectorAssembler}
+import org.apache.spark.ml.feature.{IndexToString, StringIndexer, VectorIndexer, VectorAssembler}
 import org.apache.spark.ml.classification.{GBTClassificationModel, GBTClassifier}
 import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator
-import org.apache.spark.ml.tuning.{ParamGridBuilder, CrossValidator, 
-
-TrainValidationSplit}
+import org.apache.spark.ml.tuning.{ParamGridBuilder, CrossValidator, TrainValidationSplit}
 import org.apache.spark.ml.{Pipeline, PipelineModel}
 import org.apache.spark.ml.classification.DecisionTreeClassificationModel
-import org.apache.spark.ml.feature.{IndexToString, StringIndexer, VectorIndexer, 
-
-VectorAssembler}
+import org.apache.spark.ml.feature.{IndexToString, StringIndexer, VectorIndexer, VectorAssembler}
 import org.apache.spark.sql.SparkSession
 
-//val spark = SparkSession.builder().appName("Spark ML example").config
-
-("spark.some.config.option", "some-value").getOrCreate()
+//val spark = SparkSession.builder().appName("Spark ML example").config("spark.some.config.option", "some-value").getOrCreate()
 //val sc = spark.sparkContext
 
 val sqlContext = new org.apache.spark.sql.SQLContext(sc)
 
 // csv파일에 header유무 확인, delimiter 확인
 // Input file loading..
-val df = sqlContext.read.format("com.databricks.spark.csv").option("header", 
-
-"true").option("inferSchema", "true").load("iris.txt")
+val df = sqlContext.read.format("com.databricks.spark.csv").option("header", "true").option("inferSchema", "true").load("/user/spark/iris.txt")
 
 // schema 정보 및 data확인
 df.printSchema
@@ -786,25 +786,16 @@ val featureIndexer = new VectorIndexer().setInputCol("features").setOutputCol("i
 //     maxDepth=5
 //     seed = 1234L
 
-val algorithm = new DecisionTreeClassifier().setLabelCol
-
-("indexedLabel").setFeaturesCol("indexedFeatures") //.setImpurity
-
-("entropy").setMaxBins(32)
-//val algorithm = new RandomForestClassifier().setLabelCol
-
-("indexedLabel").setFeaturesCol("indexedFeatures").setNumTrees(10)
+val algorithm = new DecisionTreeClassifier().setLabelCol("indexedLabel").setFeaturesCol("indexedFeatures") 
+//.setImpurity("entropy").setMaxBins(32)
+//val algorithm = new RandomForestClassifier().setLabelCol("indexedLabel").setFeaturesCol("indexedFeatures").setNumTrees(10)
 
 
 // Label Converter
-val labelConverter = new IndexToString().setInputCol("prediction").setOutputCol
-
-("predictedLabel").setLabels(labelIndexer.fit(trainingData).labels)
+val labelConverter = new IndexToString().setInputCol("prediction").setOutputCol("predictedLabel").setLabels(labelIndexer.fit(trainingData).labels)
 
 // Pipeline 만들기
-val pipeline = new Pipeline().setStages(Array(assembler, labelIndexer, featureIndexer, 
-
-algorithm, labelConverter))
+val pipeline = new Pipeline().setStages(Array(assembler, labelIndexer, featureIndexer, algorithm, labelConverter))
 
 // Training 
 val model = pipeline.fit(trainingData)
@@ -818,36 +809,22 @@ result.show
 
 
 // Evaluation
-val evaluator = new MulticlassClassificationEvaluator().setLabelCol
-
-("indexedLabel").setPredictionCol("prediction").setMetricName("accuracy")
+val evaluator = new MulticlassClassificationEvaluator().setLabelCol("indexedLabel").setPredictionCol("prediction").setMetricName("accuracy")
 val accuracy = evaluator.evaluate(result)
 
-val evaluator = new MulticlassClassificationEvaluator().setLabelCol
-
-("indexedLabel").setPredictionCol("prediction").setMetricName("f1")
+val evaluator = new MulticlassClassificationEvaluator().setLabelCol("indexedLabel").setPredictionCol("prediction").setMetricName("f1")
 val f1 = evaluator.evaluate(result)
 
-val evaluator = new MulticlassClassificationEvaluator().setLabelCol
-
-("indexedLabel").setPredictionCol("prediction").setMetricName("weightedPrecision")
+val evaluator = new MulticlassClassificationEvaluator().setLabelCol("indexedLabel").setPredictionCol("prediction").setMetricName("weightedPrecision")
 val weightedPrecision = evaluator.evaluate(result)
 
-val evaluator = new MulticlassClassificationEvaluator().setLabelCol
-
-("indexedLabel").setPredictionCol("prediction").setMetricName("weightedRecall")
+val evaluator = new MulticlassClassificationEvaluator().setLabelCol("indexedLabel").setPredictionCol("prediction").setMetricName("weightedRecall")
 val weightedRecall = evaluator.evaluate(result)
 
-println("accu:"+accuracy+" f1:"+f1+" wPrecision:"+weightedPrecision+" 
-
-wRecall:"+weightedRecall)
+println("accu:"+accuracy+" f1:"+f1+" wPrecision:"+weightedPrecision+" wRecall:"+weightedRecall)
 
 //DTC model 뽑아내기
-val mdl = model.stages.toList.filter(_.isInstanceOf
-
-[DecisionTreeClassificationModel]).head.asInstanceOf
-
-[DecisionTreeClassificationModel]
+val mdl = model.stages.toList.filter(_.isInstanceOf[DecisionTreeClassificationModel]).head.asInstanceOf[DecisionTreeClassificationModel]
 
 //입력 feature 중요도 보기
 mdl.featureImportances
@@ -876,7 +853,7 @@ import org.apache.spark.sql.DataFrame
 
 
 //programmatically defining schema 로 불러옴 (StructType() 직접작성)
-var df = new SQLContext(sc).read.format("com.databricks.spark.csv").schema(StructType(Array(StructField("sepal_length",DoubleType,true),StructField("sepal_width",DoubleType,true),StructField("petal_length",DoubleType,true),StructField("petal_width",DoubleType,true),StructField("species",StringType,true)))).option("header", "true").option("delimiter", ",").load("iris.txt")
+var df = new SQLContext(sc).read.format("com.databricks.spark.csv").schema(StructType(Array(StructField("sepal_length",DoubleType,true),StructField("sepal_width",DoubleType,true),StructField("petal_length",DoubleType,true),StructField("petal_width",DoubleType,true),StructField("species",StringType,true)))).option("header", "true").option("delimiter", ",").load("/user/spark/iris.txt")
 
 // species는 명목형이기 때문에, 수치로 바꿔줌
 val StringIndexer_species = new StringIndexer().setInputCol("species").setOutputCol("si_species").setHandleInvalid("skip")
@@ -947,7 +924,8 @@ TEST_DF.limit(1).show(false)
 //모델 및 파이프라인 관리
 
 //파이프라인 저장
-pline.save("/Users/spark/k_means_iris_pipeline")
+#pline.save("/Users/spark/k_means_iris_pipeline")
+pline.save("/user/spark/k_means_iris_pipeline")
 
 //덮어쓰기
 pline.write.overwrite.save(("k_means_iris_pipeline"))
