@@ -40,7 +40,7 @@ angular.module('todo').factory('todoStorage', function ($http, $window, $rootSco
        //storage.todos = storage._getFromLocalStorage()
        angular.copy(storage._getFromLocalStorage(), storage.todos)
        return storage.todos;
-     },
+     }, // get
      
      remove: function (todo) {
         var idx = storage.todos.findIndex(function (item) {
@@ -55,7 +55,7 @@ angular.module('todo').factory('todoStorage', function ($http, $window, $rootSco
           //save Local Storage
           storage._saveToLocalStorage(storage.todos);
         }
-     },
+     }, // remove
      
      add: function (newTodoTitle) {
         // create new todo
@@ -70,11 +70,11 @@ angular.module('todo').factory('todoStorage', function ($http, $window, $rootSco
        
        //save LocalStorage 
        storage._saveToLocalStorage(storage.todos);
-     },
+     }, // add
      
      update: function () {
          storage._saveToLocalStorage(storage.todos);
-     },
+     }, // update
      
      //////////////
      // login 처리
@@ -115,8 +115,35 @@ angular.module('todo').factory('todoStorage', function ($http, $window, $rootSco
              //$rootScope.loggedIn = true;
              //$window.location.href = '/login/' + $rootScope.loggedIn; 
         //  }
-     }
-  }
+     }, // login
+     
+     //////////////
+     // 회원가입
+     //////////////
+     logup: function (userInfo) {
+      // console.log('here')
+      return fetch('/logup', {
+                              method: 'POST',
+                              credentials: 'include',
+                              headers: { "content-type": "application/json"},
+                              body: JSON.stringify(userInfo)
+      })
+       //.then(res => res.json())
+       //.then(json => console.log(json))
+      .then(res => {
+                     if(res.ok) 
+                         $window.location.href = '/login';
+      })
+      .catch(err => {
+          throw new Error('Error login:', err)
+        });
+       
+     } // signUp
+  
+      
+      
+      
+  } // storage
 
   return storage;
 });

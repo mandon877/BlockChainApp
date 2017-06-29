@@ -34,3 +34,9 @@
       templateUrl: 'tpl/loginForm.tpl.html'
     }
   });
+  
+  angular.module('todo').directive('logupForm', function() {
+    return {
+      templateUrl: 'tpl/logupForm.tpl.html'
+    }
+  });

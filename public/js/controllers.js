@@ -32,11 +32,12 @@ angular.module('todo').controller('TodoCtrl'
     //     $scope.LoginStatus = '로그인';
     //  else
     //     $scope.LoginStatus = '로그아웃';
+    
     $scope.LoginInStatus = '로그인';
     $scope.LoginStatus = '로그아웃';
     
-        
-    
+    $scope.etherMetaMaskAccount = web3.eth.accounts[0];
+
      //  $scope.todo = {
      //   title: '요 가 수 련',
      //   completed: false,
@@ -102,6 +103,10 @@ angular.module('todo').controller('TodoCtrl'
      
      $scope.login = function (loginInfo) {
        todoStorage.login(loginInfo);
+     }
+     
+     $scope.logup = function (userInfo) {
+       todoStorage.logup(userInfo);
      }
 }
 //]

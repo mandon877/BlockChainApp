@@ -5,6 +5,7 @@ body {
       top:0px;
       overflow:hidden;
 }
+
 #top-block {
               position:absolute;
               top:0px;
@@ -20,22 +21,55 @@ body {
               border-width:0px;
               background-color:#bbbbbb;
 }
-#logo-block {
+
+#logoOutLine-block {
               position:relative;
               top:50px;
               left:0px;
               z-index:100;
               width:100%;
               height:70px;
+              margin: auto;
+              padding:0px;
+              border-style:solid;
+              border-width:1px;
+              background-color:#ffffff;
+}
+
+#logo-block {
+              position:absolute;
+              top:0px;
+              left:0px;
+              z-index:101;
+              width:50%;
+              height:70px;
               font-size:24pt;
               text-align: left;
-              /*margin-left:-1px;*/
               margin: auto;
               padding:0px;
               border-style:solid;
               border-width:0px;
               background-color:#ffffff;
 }
+
+#etherMetaMaskAccount-block {
+              position:absolute;
+              top:0px;
+              left:50%;
+              z-index:100;
+              width:50%;
+              height:15px;
+              font-size:10pt;
+              font-family: "NanumGothic";
+              text-align: right;
+              /*margin: auto;*/
+              margin-top: 28px;
+              padding:0px;
+              border-style:solid;
+              border-width:0px;
+              background-color:#ffffff;
+}
+
 #body-menu {
             position:relative;
             top:0px;
@@ -47,6 +81,7 @@ body {
             border-width:0px;
             background-color:#7fb8ff;
 }
+
 #body-content {
                position:relative;
                top:1px;
@@ -57,5 +92,4 @@ body {
                border-style:solid;
                border-width:0px;
                text-align: center;
-  
 }

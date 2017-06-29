@@ -10,6 +10,7 @@
   <link rel="stylesheet" type="text/css" href="css/mainFrame.css"/>
   <link rel="stylesheet" type="text/css" href="css/navigation.css"/>
   <link rel="stylesheet" type="text/css" href="css/style.css"/>
+  <link rel="stylesheet" type="text/css" href="css/bodyEtc.css"/>
   <link data-require="bootstrap@3.3.6" data-semver="3.3.6" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
   <script data-require="bootstrap@3.3.6" data-semver="3.3.6" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
   <script data-require="angularjs@1.5.7" data-semver="1.5.7" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
@@ -20,7 +21,10 @@
 </head>
 <body ng-app="todo" ng-controller="TodoCtrl">
 <div id="top-block"><a href="logout">{{ LoginStatus }}</a></div> 
-<div id="logo-block">&nbsp;<img src="img/favicon.ico" height="20" width="20"/>&nbsp;{{ tempLogoString }}</div>
+<div id="logoOutLine-block">
+  <div id="logo-block">&nbsp;<img src="img/favicon.ico" height="20" width="20"/>&nbsp;{{ tempLogoString }}</div>
+  <div id="etherMetaMaskAccount-block">◈ Account - &nbsp;{{etherMetaMaskAccount}}&nbsp;&nbsp;</div>  
+</div>
 <todo-navigation></todo-navigation>
 <div id="body-content">
 <iframe src="https://codepen.io/" name="dd" scrolling="yes" style="display:block;border:none;overflow:hidden;height:100vh;width:100vw">www.korbit.co.kr/</iframe>

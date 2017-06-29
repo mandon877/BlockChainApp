@@ -1,0 +1,165 @@
+/* Login Start */
+#login-box {
+          position:relative;
+          top:50px;
+          left:0px;
+          z-index:100;
+          width:400px;
+          height:300px;
+          font-size:12pt;
+          font-family: "맑은 고딕";
+          text-align: center;
+          /*margin-left:-1px;*/
+          margin: auto;
+          padding:10px;
+          border-style:solid;
+          border-color:#cccccc;
+          border-width:1px;
+          background-color:#efefef;
+}
+
+#login-alert-box {
+          position:relative;
+          top:60px;
+          left:0px;
+          z-index:100;
+          width:400px;
+          height:53px;
+          font-size:10pt;
+          font-family: "맑은 고딕";
+          text-align: center;
+          /*margin-left:-1px;*/
+          margin: auto;
+          padding:0px;
+          border-style:solid;
+          border-width:0px;
+          background-color:#ffffff;
+}
+/* Login End */
+
+/* Logup Start */
+#logup-box {
+          position:relative;
+          top:30px;
+          left:0px;
+          z-index:100;
+          width:500px;
+          height:480px;
+          font-size:12pt;
+          font-family: "맑은 고딕";
+          text-align: center;
+          /*margin-left:-1px;*/
+          margin: auto;
+          padding:10px;
+          border-style:solid;
+          border-color:#cccccc;
+          border-width:1px;
+          background-color:#efefef;
+}
+
+#logup1-alert-box {
+          position:absolute;
+          top:140px;
+          left:25px;
+          width:150px;
+          height:24px;
+          font-size:10pt;
+          font-family: "맑은 고딕";
+          text-align: left;
+          margin: auto;
+          padding:0px;
+}
+
+#logup2-alert-box {
+          position:absolute;
+          top:140px;
+          left:280px;
+          width:150px;
+          height:24px;
+          font-size:10pt;
+          font-family: "맑은 고딕";
+          text-align: left;
+          margin: auto;
+          padding:0px;
+}
+
+#logup3-alert-box {
+          left:16px;
+          width:150px;
+          height:24px;
+          font-size:10pt;
+          font-family: "맑은 고딕";
+          text-align: left;
+          margin: auto;
+          padding:0px;
+}
+/* Logup End */
+
+/* Simple Storage Start */
+#info-main {
+          position:relative;
+          top:30px;
+          left:0px;
+          z-index:10000;
+          width:800px;
+          height:400px;
+          font-size:12pt;
+          font-family: "맑은 고딕";
+          text-align: left;
+          margin: auto;
+          padding:10px;
+          border-style:solid;
+          border-color:#cccccc;
+          border-width:0px;
+          background-color:#ffffff;
+}
+
+#storedData {
+    color:red;
+    font-weight: bold;
+    font-size:150%;
+    margin-right:10px;
+    
+}
+
+#lastBlock {
+    color:red;
+    font-weight: bold;
+    font-size:150%;
+    margin-right:10px;
+}
+
+#newValue {
+    width: 200px; 
+    margin-right:10px; 
+    text-align:right;
+}
+/* Simple Storage End */
+
+/* AngularJsTest Start */
+#AngularTestInfo-main {
+          position:relative;
+          top:30px;
+          left:0px;
+          z-index:10000;
+          width:800px;
+          height:800px;
+          font-size:12pt;
+          font-family: "맑은 고딕";
+          text-align: left;
+          margin: auto;
+          padding:10px;
+          border-style:solid;
+          border-color:#cccccc;
+          border-width:0px;
+          background-color:#ffffff;
+}
+
+#storedData {
+    color:red;
+    font-weight: bold;
+    font-size:150%;
+    margin-right:10px;
+    
+}
+/* AngularJsTest End */

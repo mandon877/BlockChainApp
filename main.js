@@ -250,11 +250,46 @@ app.get('/logout', function(req, res){
 ///////////////////////////////////////////////////////////////////////////////
 // login End                                                                 //
 ///////////////////////////////////////////////////////////////////////////////
+
+//-----------------------------------------------------------------------------
+
+///////////////////////////////////////////////////////////////////////////////
+// 회원가입 START                                                            //
+///////////////////////////////////////////////////////////////////////////////
+app.post('/logup', function(req, res, next) {
+    const body = req.body;
+    console.log('Logup request received:', body);
+    return Models.User
+      .logupFind(req.body.username)
+      .then(user => {
+        req.session.key=user.username;
+        console.log("Logged in as username : ", req.session.key);
+        return res.send({ok:'ok'})
+      })
+      .catch(err => {
+          console.log(err);
+          res.status(400).send(err);
+      });
+})
+
+///////////////////////////////////////////////////////////////////////////////
+// 회원가입 END                                                              //
+///////////////////////////////////////////////////////////////////////////////
+
+
+////////////// RESTFULL START ///////////////////////////////
 app.get('/login', function(req, res){
     if (req.session.key)
        res.render('home'); 
     else
        res.render('login'); 
+});
+
+app.get('/logup', function(req, res){
+    if (req.session.key)
+       res.render('home'); 
+    else
+       res.render('logup'); 
 });
 
 app.get('/', function(req, res){
@@ -375,5 +410,9 @@ app.get('/ContackUs', function(req, res){
     else
         res.render('login');
 });
+////////////// RESTFULL END ///////////////////////////////
+
 app.listen(process.env.PORT, process.env.IP);
 sys.puts('server running ' + 'now ' + Date.now());
+
+
